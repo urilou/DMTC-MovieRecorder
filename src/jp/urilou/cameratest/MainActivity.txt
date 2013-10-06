@@ -1,0 +1,77 @@
+package jp.urilou.cameratest;
+
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.hardware.Camera;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.TextView;
+
+public class MainActivity extends Activity {
+
+	// LayoutParamsにセットするパラメータを準備
+	private final int FP = ViewGroup.LayoutParams.FILL_PARENT;
+	private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
+	private Camera mcamera;
+	private XCameraView mCameraPreview;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// 解像度の取得
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		Display disp = wm.getDefaultDisplay();
+		String width = "Width = " + disp.getWidth();
+		String height = "Height = " + disp.getHeight();
+
+		// 　FrameLayoutを準備
+		// FrameLayout fl = new FrameLayout(this);
+		// setContentView(fl);
+
+		FrameLayout layout = new FrameLayout(this);
+		setContentView(layout);
+
+		LayoutParams layoutParams1 = new LayoutParams(1000,1000);
+		layoutParams1.topMargin = 280;
+		layout.addView(new XCameraView(this), layoutParams1);
+
+		//　SurfaceViewと重ねるTextViewを準備
+		TextView tv = new TextView(this);
+		tv.setText("撮影ボタン" + width + height);
+		tv.setHeight(150);
+		tv.setTextColor(Color.BLACK);
+		tv.setBackgroundColor(Color.WHITE);
+		
+		Button bt = new Button(this);
+		bt.setText("撮影");
+		bt.setHeight(150);
+				
+		LayoutParams layoutParams2 = new LayoutParams(280, 720);
+		layoutParams2.leftMargin = 230;
+		layoutParams2.topMargin = 1000;
+		layout.addView(bt, layoutParams2);
+
+		// 　FrameLayoutにSurfaceViewをセットする
+		// fl.addView(new CameraView(this), new ViewGroup.LayoutParams(720, 720));
+		// fl.addView(new CameraView(this), new ViewGroup.LayoutParams(WC, WC));
+
+		// 　FrameLayoutにTextViewをセットする
+		//fl.addView(tv, new ViewGroup.LayoutParams(FP, WC));
+
+		// -------------------------------------------
+		// this.setContentView(new CameraView(this));
+		// -------------------------------------------
+
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	}
+}
+
+//レイアウトについて：http://ichitcltk.hustle.ne.jp/gudon/modules/pico_rd/index.php?content_id=110
